@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "62672832504",
+    "project_id": "piadinaparty-5f3c0",
+    "storage_bucket": "piadinaparty-5f3c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62672832504:android:13b3eb2a470cf6a1f1780d",
+        "android_client_info": {
+          "package_name": "com.example.piadinaparty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoEP0NKh3dlNGUTgzBYMUGdteNVYp1Drw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62672832504:android:4d1cd7ecbe1ec7a5f1780d",
+        "android_client_info": {
+          "package_name": "com.piadinapartyflutter1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoEP0NKh3dlNGUTgzBYMUGdteNVYp1Drw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
