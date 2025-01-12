@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 import 'login.dart'; // Importa la pagina di login
 import 'registrazione.dart'; // Importa la pagina di registrazione
 import 'home.dart'; // Importa la pagina della Home
+import 'package:firebase_auth/firebase_auth.dart'; // Per verificare l'utente autenticato
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/', // La rotta iniziale è la pagina di login
+      // Determina la rotta iniziale in base all'autenticazione dell'utente
+      initialRoute: FirebaseAuth.instance.currentUser != null ? '/home' : '/',
       routes: {
         '/': (context) => LoginScreen(), // Rotta per la pagina di login
         '/register': (context) => RegisterScreen(), // Rotta per la pagina di registrazione
