@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'login.dart'; // Importa la pagina di login
-import 'registrazione.dart'; // Importa la pagina di registrazione
-import 'home.dart'; // Importa la pagina della Home
+import 'view/login.dart'; // Importa la pagina di login
+import 'view/registrazione.dart'; // Importa la pagina di registrazione
+import 'view/home.dart'; // Importa la pagina della Home
 import 'package:firebase_auth/firebase_auth.dart'; // Per verificare l'utente autenticato
 
 void main() async {

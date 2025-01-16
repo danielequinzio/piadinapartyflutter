@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../controller/utente_controller.dart';
+import '../model/utente_model.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   final User? user = FirebaseAuth.instance.currentUser;
-  Map<String, dynamic>? userData;
+  UserModel? userData;
   bool isLoading = true;
 
   @override
@@ -21,22 +22,11 @@ class _UserPageState extends State<UserPage> {
   Future<void> _fetchUserData() async {
     try {
       if (user != null) {
-        // Recupera i dati dell'utente dalla collezione "users" usando l'UID
-        DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
-            .get();
-
-        if (snapshot.exists) {
-          setState(() {
-            userData = snapshot.data();
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
+        UserModel? fetchedUserData = await UserController().getUserData(user!.uid);
+        setState(() {
+          userData = fetchedUserData;
+          isLoading = false;
+        });
       }
     } catch (e) {
       print("Errore nel recupero dei dati utente: $e");
@@ -59,7 +49,7 @@ class _UserPageState extends State<UserPage> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text('Si'),
+              child: Text('Sì'),
             ),
           ],
         );
@@ -75,44 +65,46 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profilo Utente'),
-        automaticallyImplyLeading: false, // Rimuove il pulsante per tornare indietro
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: _confirmLogout,
-          ),
-        ],
-      ),
+      backgroundColor: Colors.orange, // Imposta lo sfondo arancione
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Mostra un caricamento mentre i dati vengono recuperati
-          : userData != null
-          ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: userData != null
+            ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nome: ${userData!['name'] ?? 'Non disponibile'}',
+              'Nome: ${userData!.name}',
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 8),
             Text(
-              'Cognome: ${userData!['surname'] ?? 'Non disponibile'}',
+              'Cognome: ${userData!.surname}',
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 8),
             Text(
-              'Email: ${userData!['email'] ?? 'Non disponibile'}',
+              'Email: ${userData!.email}',
               style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 32),
+            Center(
+              child: ElevatedButton(
+                onPressed: _confirmLogout,
+                child: Text('Logout'),
+              ),
             ),
           ],
-        ),
-      )
-          : Center(
-        child: Text(
-          'Nessun dato utente disponibile.',
-          style: TextStyle(fontSize: 18, color: Colors.red),
+        )
+            : Center(
+          child: Text(
+            'Nessun dato utente disponibile.',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.red,
+            ),
+          ),
         ),
       ),
     );

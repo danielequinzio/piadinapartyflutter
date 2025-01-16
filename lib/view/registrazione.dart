@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../controller/auth_controller.dart';
+import '../controller/utente_controller.dart';
+import '../model/utente_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,8 +14,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _surnameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  final AuthController _authController = AuthController();
+  final UserController _userController = UserController();
   bool _isLoading = false;
 
   Future<void> _register() async {
@@ -22,28 +24,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Crea un nuovo utente con email e password
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      User? user = await _authController.register(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
 
-      // Salva i dettagli dell'utente su Firestore
-      await _firestore.collection('users').doc(userCredential.user?.uid).set({
-        'name': _nameController.text.trim(),
-        'surname': _surnameController.text.trim(),
-        'email': _emailController.text.trim(),
-      });
+      if (user != null) {
+        UserModel userModel = UserModel(
+          id: user.uid,
+          name: _nameController.text.trim(),
+          surname: _surnameController.text.trim(),
+          email: _emailController.text.trim(),
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registrazione completata con successo!')),
-      );
+        await _userController.saveUserData(userModel);
 
-      // Naviga alla pagina di login
-      Navigator.pushNamed(context, '/');
-    } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registrazione completata con successo!')),
+        );
+
+        Navigator.pushNamed(context, '/');
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Registrazione fallita')),
+        SnackBar(content: Text(e.toString())),
       );
     } finally {
       setState(() {
@@ -56,9 +60,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registrazione'),
+        title: Column(
+          children: [
+            Text('Piadina Party'),
+          ],
+        ),
+        automaticallyImplyLeading: false, // Rimuove la freccia per tornare indietro
       ),
-      body: Padding(
+      backgroundColor: Colors.orange,
+      body: SingleChildScrollView( // Aggiungi questo widget
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -112,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/'); // Torna alla pagina di login
+                Navigator.pushNamed(context, '/');
               },
               child: Text(
                 "Sei già registrato? Accedi",

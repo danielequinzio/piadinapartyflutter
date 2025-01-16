@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../controller/auth_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
+  final AuthController _authController = AuthController();
   bool _isLoading = false;
 
   Future<void> _login() async {
@@ -18,18 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // Effettua il login con Firebase Authentication
-      await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      await _authController.login(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
-
-      // Reindirizza alla Home Page in caso di successo
-      Navigator.pushReplacementNamed(context, '/home'); // Naviga alla home
-    } on FirebaseAuthException catch (e) {
-      // Mostra un messaggio d'errore in caso di fallimento
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Login failed')),
+        SnackBar(content: Text(e.toString())),
       );
     } finally {
       setState(() {
@@ -42,8 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Column(
+          children: [
+            Text('Piadina Party'),
+          ],
+        ),
+        automaticallyImplyLeading: false, // Rimuove la freccia per tornare indietro
       ),
+      backgroundColor: Colors.orange,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -82,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/register'); // Rotta alla registrazione
+                Navigator.pushNamed(context, '/register');
               },
               child: Text(
                 "Non sei ancora registrato? Registrati",
