@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'view/login.dart'; // Importa la pagina di login
-import 'view/registrazione.dart'; // Importa la pagina di registrazione
-import 'view/home.dart'; // Importa la pagina della Home
-import 'package:firebase_auth/firebase_auth.dart'; // Per verificare l'utente autenticato
+import 'view/login.dart';
+import 'view/registrazione.dart';
+import 'view/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  WidgetsFlutterBinding.ensureInitialized(); //Garantisce che i binding di Flutter siano pronti prima di eseguire codice asincrono
+  await Firebase.initializeApp( //inizializza firebase nell'app
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const MyApp()); //metodo per lanciare l'applicazione Flutter
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget { //classe MyMap è utilizzata come punto di configurazione per temi, rotte e la struttura principale dell'app
   const MyApp({super.key});
 
   @override

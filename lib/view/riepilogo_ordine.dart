@@ -19,7 +19,7 @@ class RiepilogoDatiScreen extends StatelessWidget {
   });
 
   Future<void> _confermaOrdine(BuildContext context) async {
-    final bool? conferma = await showDialog<bool>(
+    final bool? conferma = await showDialog<bool>(  //variabile conferma prende true o false in base alla risposta all'alert dialog mostrato tramite showDialog
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -43,15 +43,17 @@ class RiepilogoDatiScreen extends StatelessWidget {
       },
     );
 
+
     if (conferma == true) {
-      final user = FirebaseAuth.instance.currentUser;
+      final user = FirebaseAuth.instance.currentUser;   //tramite firebaseAuth.instance.currentUser si recuperano le info sull'utente attualmente autenticato
       if (user == null) {
         throw Exception('Utente non autenticato');
       }
 
-      final piadineSelezionate = Map<String, int>.from(ordine.piadine)..removeWhere((key, value) => value == 0);
+      final piadineSelezionate = Map<String, int>.from(ordine.piadine)..removeWhere((key, value) => value == 0);  //prende una copia del map "ordine.piadine" e rimuove quelle con valore == 0
       final bevandeSelezionate = Map<String, int>.from(ordine.bevande)..removeWhere((key, value) => value == 0);
 
+      //Map che rappresenta i dati dell'ordine da salvare su Firestore
       final ordineData = {
         'idUtente': user.uid,
         'piadine': piadineSelezionate,
@@ -68,6 +70,7 @@ class RiepilogoDatiScreen extends StatelessWidget {
     }
   }
 
+  //funzione relativa al button Annulla Ordine
   Future<void> _annullaOrdine(BuildContext context) async {
     final bool? annulla = await showDialog<bool>(
       context: context,
@@ -103,13 +106,13 @@ class RiepilogoDatiScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Riepilogo Dati'),
-        automaticallyImplyLeading: false, // Rimuove l'icona di ritorno indietro
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         color: Colors.orange,
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),  //margine interno di 16 pixel
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -123,7 +126,7 @@ class RiepilogoDatiScreen extends StatelessWidget {
               child: Text('Conferma Ordine'),
             ),
             SizedBox(height: 16),
-            Row(
+            Row(  //sulla stessa riga inserisco i button "indietro" ed "annulla ordine"
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(

@@ -29,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _passwordController.text.trim(),
       );
 
+      //creazione oggetto della classe Utente
       if (user != null) {
         UserModel userModel = UserModel(
           id: user.uid,
@@ -37,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           email: _emailController.text.trim(),
         );
 
-        await _userController.saveUserData(userModel);
+        await _userController.saveUserData(userModel); //funzione di utente controller richiamata dove viene passato come parametro l'oggetto di Utente creato e da salvare nel database
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Registrazione completata con successo!')),
@@ -65,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Text('Piadina Party'),
           ],
         ),
-        automaticallyImplyLeading: false, // Rimuove la freccia per tornare indietro
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.orange,
       body: SingleChildScrollView( // Aggiungi questo widget

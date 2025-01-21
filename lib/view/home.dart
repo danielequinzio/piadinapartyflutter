@@ -11,12 +11,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; //variabile che tiene traccia dell'indice della pagina attualmente selezionata
 
-  final List<Map<String, dynamic>> _pages = [
+  final List<Map<String, dynamic>> _pages = [ //pages è una lista di mappe che definisce le pagine disponibili
     {
-      'title': 'Home',
-      'widget': HomePage(),
+      'title': 'Home', //Il titolo da visualizzare nella barra superiore.
+      'widget': HomePage(), //Il widget che rappresenta il contenuto della pagina.
     },
     {
       'title': 'Offerte',
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) { //funzione che aggiorna lo stato quando un elemento della barra di navigazione viene cliccato
     setState(() {
       _selectedIndex = index;
     });
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          Container(
+          Container( //si utilizza il Container per il titolo della pagina selezionata
             color: Colors.orange,
             width: double.infinity,
             padding: EdgeInsets.all(16.0),
@@ -59,16 +59,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Expanded(
+          Expanded( //si utilizza Expanded per il contenuto della pagina selezionata
             child: Container(
               color: Colors.orange,
-              child: _pages[_selectedIndex]['widget'],
+              child: _pages[_selectedIndex]['widget'], //si utilizza il widget corrispondente alla pagina selezionata
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[ //items è una lista che rappresenta le opzioni disponibili (Home, Offerte, Profilo)
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -82,9 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Utente',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedIndex, //tiene traccia dell'indice della pagina attualmente selezionato
         selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+        onTap: _onItemTapped, //onTap chiama _onItemTapped quando un elemento viene cliccato
       ),
     );
   }
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
   final List<String> bevande = ['Acqua', 'Coca Cola', 'Birra'];
   late OrdineController ordineController;
 
-  @override
+  @override //inizializzi la variabile ordineController passandogli l'oggetto creato ordine per un utilizzo futuro del controller
   void initState() {
     super.initState();
     final ordine = Ordine(
@@ -112,6 +112,7 @@ class _HomePageState extends State<HomePage> {
     ordineController = OrdineController(ordine);
   }
 
+  //settaggio info relative ai tasti + e -
   Widget _buildItemRow(String item) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,8 +143,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //funzione se si clicca il pulsante confermaOrdine
   void _confermaOrdine() {
-    final piadineSelezionate = ordineController.ordine.piadine.values.any((qty) => qty > 0);
+    final piadineSelezionate = ordineController.ordine.piadine.values.any((qty) => qty > 0); //Map di piadine con quantità > 0
     final bevandeSelezionate = ordineController.ordine.bevande.values.any((qty) => qty > 0);
 
     if (piadineSelezionate || bevandeSelezionate) {

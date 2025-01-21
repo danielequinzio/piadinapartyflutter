@@ -25,6 +25,7 @@ class Ordine {
       'Birra': 3.0,
     };
 
+    //Scorrendo la lista di piadine e bevande, sommi i prezzi delle piadine/bevande selezionate moltiplicate per la loro quantita e le sommi al totale
     prezzo = 0.0;
     piadine.forEach((item, qty) {
       prezzo += (prezziPiadine[item] ?? 0) * qty;

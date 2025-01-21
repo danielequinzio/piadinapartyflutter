@@ -9,7 +9,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final User? user = FirebaseAuth.instance.currentUser;
+  final User? user = FirebaseAuth.instance.currentUser;   //istanza dell'utente attualmente loggato
   UserModel? userData;
   bool isLoading = true;
 
@@ -21,10 +21,10 @@ class _UserPageState extends State<UserPage> {
 
   Future<void> _fetchUserData() async {
     try {
-      if (user != null) {
-        UserModel? fetchedUserData = await UserController().getUserData(user!.uid);
+      if (user != null) { //se l'utente esiste allora si prosegue col recupero delle info associate all'utente
+        UserModel? fetchedUserData = await UserController().getUserData(user!.uid); //si richiama la funzione presente nel controller che si occupa del recupero dei dati
         setState(() {
-          userData = fetchedUserData;
+          userData = fetchedUserData; //userData viene popolato con i dati dell'utente ottenuti tramite il controller
           isLoading = false;
         });
       }
@@ -36,6 +36,7 @@ class _UserPageState extends State<UserPage> {
     }
   }
 
+  //funzione relativa al pulsante di logout
   Future<void> _confirmLogout() async {
     final shouldLogout = await showDialog<bool>(
       context: context,
